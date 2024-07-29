@@ -1,0 +1,8 @@
+-- Create the authors table
+CREATE TABLE authors (
+    id SERIAL PRIMARY KEY,
+    last_name VARCHAR(255) NOT NULL,
+    first_name INT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

@@ -14,14 +14,14 @@ type Book struct {
 
 // CreateBook inserts a new book record into the database
 func CreateBook(db *sql.DB, book *Book) error {
-	query := `INSERT INTO books (title, author, description) VALUES ($1, $2, $3)`
+	query := `INSERT INTO books (title, author, book_description) VALUES ($1, $2, $3)`
 	_, err := db.Exec(query, book.Title, book.Author, book.Description)
 	return err
 }
 
 // GetBook retrieves a book by ID
 func GetBookByID(db *sql.DB, id int) (*Book, error) {
-	query := `SELECT id, title, author, description FROM books WHERE id = $1`
+	query := `SELECT id, title, author, book_description FROM books WHERE id = $1`
 	row := db.QueryRow(query, id)
 
 	var book Book
@@ -34,7 +34,7 @@ func GetBookByID(db *sql.DB, id int) (*Book, error) {
 
 // GetBooks retrieves all books
 func GetAllBooks(db *sql.DB) ([]Book, error) {
-	query := `SELECT id, title, author, description FROM books`
+	query := `SELECT id, title, author, book_description FROM books`
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

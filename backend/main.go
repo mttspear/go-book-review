@@ -14,6 +14,9 @@ func main() {
 	// Initialize the database connection
 	utils.InitDB()
 
+	// Apply migrations
+	utils.MigrateDb()
+
 	// Register routes
 	r := routes.RegisterRoutes()
 

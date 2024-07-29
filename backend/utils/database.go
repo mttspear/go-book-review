@@ -6,6 +6,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq" // PostgreSQL driver
 )
 
@@ -35,6 +38,28 @@ func InitDB() {
 	}
 
 	log.Println("Database connected successfully")
+}
+
+// MigrateDb applies database migrations
+func MigrateDb() {
+	migrationsPath := "file://migrations" // Path to your migration files
+	databaseURL := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_NAME"))
+
+	m, err := migrate.New(migrationsPath, databaseURL)
+	if err != nil {
+		log.Fatalf("Failed to create migration instance: %v", err)
+	}
+
+	// Run migrations
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatalf("Failed to apply migrations: %v", err)
+	} else {
+		log.Println("Database migrations applied successfully")
+	}
 }
 
 // GetDB returns the database connection instance.
